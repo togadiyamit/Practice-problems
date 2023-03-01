@@ -1,0 +1,38 @@
+import java.util.*;
+public class StudentScreener {
+  public static void main(String[] args) throws Exception {
+    int totalStudents = 7;
+    int totalMarks = 1000;
+    float requiredPercentile = 50f;
+
+    int[] marks = {800, 300, 750, 760, 680, 790, 640};
+    String[] students = { "Kartik", "Devang", "Pari", "Ketan", "Sheetal", "Darshana", "Mohan" };
+    String[] examResults = {"Passed", "Failed", "Passed", "Failed", "Passed", "Passed", "Passed"};
+
+    String eligiblStudents = getEligibleStudents(totalStudents, students, marks, examResults, totalMarks, requiredPercentile);
+    System.out.println(eligiblStudents);
+  }
+
+  public static String getEligibleStudents(int totalStudents, String[] students, int[] marks, String[] examResults, int totalMarks, float requiredPercentile) throws Exception {
+   String res = "";
+    HashMap<Integer,Integer> map = new HashMap<>();
+    for(int i = 0; i<totalStudents; i++){
+        map.put(marks[i],i);
+    }
+     PriorityQueue<Integer> q = new PriorityQueue<Integer>(Collections.reverseOrder());
+     for(int i = 0; i < totalStudents; i++){
+         q.add(marks[i]);
+     }
+    int rank = 1;
+    while(!q.isEmpty()){
+        int ind = map.get(q.poll());
+        float pr = ((float)(totalStudents - rank) / (float)(totalStudents))*100;
+        if(pr >= requiredPercentile && examResults[ind] == "Passed"){
+            if(res.length() == 0) res += students[ind];
+            else res += (","+students[ind]);
+        }
+        rank++;
+    }
+    return res;
+  }
+}
